@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/matkinhig/go-blogs/api"
+)
 
 func main() {
 	fmt.Println("start golang...")
