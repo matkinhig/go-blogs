@@ -5,11 +5,17 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/matkinhig/go-blogs/api/config"
 	"github.com/matkinhig/go-blogs/api/router"
 )
 
 func Run() {
-	fmt.Println(" \n\t Listening [::]:3009 \n")
+	config.Load()
+	fmt.Printf(" \n\t Listening [::]:%d \n", config.PORT)
+	listen(config.PORT)
+}
+
+func listen(port int) {
 	r := router.New()
-	log.Fatal(http.ListenAndServe(":3009", r))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }
