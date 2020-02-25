@@ -9,7 +9,7 @@ import (
 )
 
 func Load() {
-	db, err := database.Connect
+	db, err := database.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
