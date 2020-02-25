@@ -1,20 +1,32 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 var (
-	PORT = 0
+	PORT     = 0
+	DBDRIVER = ""
+	DBURL    = ""
 )
 
 func Load() {
 	var err error
-	PORT, err = strconv.Atoi(os.Getenv("PORT"))
+	err = godotenv.Load()
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
+	}
+	PORT, err = strconv.Atoi(os.Getenv("API_PORT"))
+	if err != nil {
 		PORT = 3009
 	}
+
+	DBDRIVER = os.Getenv("DB_DRIVER")
+	DBURL = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+
 }
