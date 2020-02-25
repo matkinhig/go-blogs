@@ -2,6 +2,8 @@ package database
 
 import (
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
 	"github.com/matkinhig/go-blogs/api/config"
 )
 

@@ -25,12 +25,11 @@ func Load() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	for _, user := range users {
-		err = db.Debug().Model(&models.User{}).Create(&user)
+	for _, u := range users {
+		err = db.Debug().Model(&models.User{}).Create(&u).Error
 		if err != nil {
 			log.Fatal(err)
 		}
-		console.Pretty(user)
+		console.Pretty(u)
 	}
 }

@@ -27,6 +27,6 @@ func Load() {
 	}
 
 	DBDRIVER = os.Getenv("DB_DRIVER")
-	DBURL = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+	DBURL = fmt.Sprintf("%s:%s@(103.74.116.95)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
 
 }
