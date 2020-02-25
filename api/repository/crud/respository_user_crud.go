@@ -10,7 +10,7 @@ type repositoryUsersCRUD struct {
 	db *gorm.DB
 }
 
-func (r *repositoryUsersCRUD) NewRepositoryUsersCRUD(db *gorm.DB) *repositoryUsersCRUD {
+func NewRepositoryUsersCRUD(db *gorm.DB) *repositoryUsersCRUD {
 	return &repositoryUsersCRUD{db}
 }
 

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/matkinhig/go-blogs/api/models"
 	"github.com/matkinhig/go-blogs/api/repository"
 	"github.com/matkinhig/go-blogs/api/repository/crud"
+	"github.com/matkinhig/go-blogs/api/responses"
 )
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -22,8 +24,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	u := models.User{}
-	err = json.Unmarshal(body, &user)
+	us := models.User{}
+	err = json.Unmarshal(body, &us)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -34,9 +36,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	repo := crud.NewRepositoryUserCRUD(db)
+	repo := crud.NewRepositoryUsersCRUD(db)
 	func(u repository.UserRepository) {
-		newUser, err := u.Save(u)
+		user, err := u.Save(us)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+		w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, user.ID))
+		responses.JSON(w, http.StatusCreated, user)
 	}(repo)
 }
 
