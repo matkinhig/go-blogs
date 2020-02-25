@@ -14,7 +14,7 @@ func NewRepositoryUsersCRUD(db *gorm.DB) *repositoryUsersCRUD {
 	return &repositoryUsersCRUD{db}
 }
 
-func (r *repositoryUsersCRUD) Save(u models.User) (modes.User, error) {
+func (r *repositoryUsersCRUD) Save(u models.User) (models.User, error) {
 	var err error
 	done := make(chan bool)
 	go func(ch chan<- bool) {
@@ -29,4 +29,22 @@ func (r *repositoryUsersCRUD) Save(u models.User) (modes.User, error) {
 		return u, nil
 	}
 	return models.User{}, nil
+}
+
+func (r *repositoryUsersCRUD) FindAll() ([]models.User, error) {
+	var err error
+	users := []models.User{}
+	done := make(chan bool)
+	go func(ch chan<- bool) {
+		err = r.db.Debug().Model(&models.User{}).Limit(100).Find(&users).Error
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+	}(done)
+	if channels.OK(done) {
+		return users, nil
+	}
+	return nil, err
 }

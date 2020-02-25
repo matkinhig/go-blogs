@@ -17,13 +17,12 @@ func JSON(w http.ResponseWriter, code int, data interface{}) {
 
 func ERROR(w http.ResponseWriter, code int, err error) {
 	if err != nil {
-		JSON(w, code , struct {
+		JSON(w, code, struct {
 			Error string `json:"error"`
 		}{
-			Error : err.Error(),
-		}) return
+			Error: err.Error(),
+		})
+		return
 	}
 	JSON(w, http.StatusBadRequest, nil)
 }
-	
-	
