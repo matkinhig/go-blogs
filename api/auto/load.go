@@ -3,7 +3,9 @@ package auto
 import (
 	"log"
 
-	database "github.com/matkinhig/go-blogs/api/db"
+	"github.com/matkinhig/go-blogs/api/database"
+	"github.com/matkinhig/go-blogs/api/models"
+	"github.com/matkinhig/go-blogs/api/utils/console"
 )
 
 func Load() {
@@ -13,5 +15,22 @@ func Load() {
 	}
 	defer db.Close()
 
-	err = db.Debug().Drop
+	err = db.Debug().DropTableIfExists(&models.User{}).Error
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = db.Debug().AutoMigrate(&models.User{}).Error
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, user := range users {
+		err = db.Debug().Model(&models.User{}).Create(&user)
+		if err != nil {
+			log.Fatal(err)
+		}
+		console.Pretty(user)
+	}
 }
