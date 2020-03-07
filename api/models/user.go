@@ -13,6 +13,7 @@ type User struct {
 	Password  string    `gorm:"size:100; not null; unique" json:"password"`
 	CreatedAt time.Time `gorm:"default:current_timestamp()" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:current_timestamp()" json:"updated_at"`
+	Post      []Post    `gorm:"foreignkey:AuthorID" json:"posts,omitempty"`
 }
 
 func (u *User) BeforeSave() error {

@@ -3,33 +3,33 @@ package routes
 import (
 	"net/http"
 
-	controller "github.com/matkinhig/go-blogs/api/controllers"
+	"github.com/matkinhig/go-blogs/api/controllers"
 )
 
 var userRoutes = []Route{
 	Route{
 		Uri:     "/users",
 		Method:  http.MethodGet,
-		Handler: controller.GetUsers,
+		Handler: controllers.GetUsers,
 	},
 	Route{
 		Uri:     "/users",
 		Method:  http.MethodPost,
-		Handler: controller.CreateUser,
+		Handler: controllers.CreateUser,
 	},
 	Route{
 		Uri:     "/users/{id}",
 		Method:  http.MethodGet,
-		Handler: controller.GetUser,
+		Handler: controllers.GetUser,
 	},
 	Route{
 		Uri:     "/users/{id}",
 		Method:  http.MethodPut,
-		Handler: controller.UpdateUser,
+		Handler: controllers.UpdateUser,
 	},
 	Route{
 		Uri:     "/users/{id}",
 		Method:  http.MethodDelete,
-		Handler: controller.DeleteUser,
+		Handler: controllers.DeleteUser,
 	},
 }
