@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
+
 )
 
 var (
@@ -28,5 +29,4 @@ func Load() {
 
 	DBDRIVER = os.Getenv("DB_DRIVER")
 	DBURL = fmt.Sprintf("%s:%s@(127.0.0.1)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
-
 }
