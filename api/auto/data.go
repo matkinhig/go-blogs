@@ -7,7 +7,8 @@ var users = []models.User{
 }
 
 var posts = []models.Post{
-	models.Post{Title: "Title",
+	models.Post{
+		Title:   "Title",
 		Content: "Hello Word",
 	},
 }
