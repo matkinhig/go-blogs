@@ -3,6 +3,7 @@ module github.com/matkinhig/go-blogs
 go 1.13
 
 require (
+	github.com/badoux/checkmail v0.0.0-20181210160741-9661bd69e9ad
 	github.com/cosiner/argv v0.0.1 // indirect
 	github.com/go-delve/delve v1.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect

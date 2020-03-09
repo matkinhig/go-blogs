@@ -41,10 +41,10 @@ func Load() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = db.Debug().Model(&posts[i]).Related(&posts[i].Author).Error
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err = db.Debug().Model(&posts[i]).Related(&posts[i].Author).Error
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 		console.Pretty(posts[i])
 	}
 }
