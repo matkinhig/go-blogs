@@ -8,6 +8,7 @@ import (
 
 	"github.com/badoux/checkmail"
 	"github.com/matkinhig/go-blogs/api/security"
+
 )
 
 type User struct {
@@ -50,6 +51,7 @@ func (u *User) Validate(a string) error {
 			return errors.New("Invalid email")
 		}
 		return nil
+		break
 	default:
 		if u.Nickname == "" {
 			return errors.New("Required Nickname")
@@ -64,6 +66,7 @@ func (u *User) Validate(a string) error {
 			return errors.New("Invalid email")
 		}
 		return nil
+		break
 	}
-
+	return nil
 }

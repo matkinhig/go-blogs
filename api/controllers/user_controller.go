@@ -13,6 +13,7 @@ import (
 	"github.com/matkinhig/go-blogs/api/repository"
 	"github.com/matkinhig/go-blogs/api/repository/crud"
 	"github.com/matkinhig/go-blogs/api/responses"
+
 )
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +48,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	us.Prepare()
-	err = us.Validate("create")
+	err = us.Validate("")
 	if err != nil {
 		responses.ERROR(w, http.StatusConflict, err)
 	}
@@ -113,6 +114,12 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
+	}
+
+	user.Prepare()
+	err = user.Validate("update")
+	if err != nil {
+		responses.ERROR(w, http.StatusConflict, err)
 	}
 
 	db, err := database.Connect()

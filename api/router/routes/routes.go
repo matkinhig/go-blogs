@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/matkinhig/go-blogs/api/middlewares"
+
 )
 
 type Route struct {
@@ -15,6 +16,7 @@ type Route struct {
 
 func Load() []Route {
 	routes := userRoutes
+	routes = append(routes, postRoutes...)
 	return routes
 }
 
