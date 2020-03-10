@@ -13,7 +13,7 @@ type Post struct {
 	Title     string    `gorm:"size :500;not null" json:"title"`
 	Content   string    `gorm:"type:text" json:"content"`
 	Author    User      `gorm:"-" json:"author"`
-	AuthorID  uint32    `gorm:"not null" json:"author_id"`
+	AuthorID  uint32    `gorm:"not null" json:"authorid"`
 	CreatedAt time.Time `gorm:"default:current_timestamp()" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:current_timestamp()" json:"updated_at"`
 }
