@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
 )
 
 func JSON(w http.ResponseWriter, code int, data interface{}) {
@@ -12,7 +13,6 @@ func JSON(w http.ResponseWriter, code int, data interface{}) {
 	if err != nil {
 		fmt.Fprintf(w, "%s", err.Error())
 	}
-
 }
 
 func ERROR(w http.ResponseWriter, code int, err error) {
@@ -26,3 +26,5 @@ func ERROR(w http.ResponseWriter, code int, err error) {
 	}
 	JSON(w, http.StatusBadRequest, nil)
 }
+
+
