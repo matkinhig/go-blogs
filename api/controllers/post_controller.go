@@ -72,7 +72,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Location", fmt.Sprintf("%s %s %d", r.Host, r.RequestURI, p.ID))
-		responses.JSON(w, http.StatusCreated, p)
+		responses.JSON(w, http.StatusCreated, &p)
 	}(repo)
 }
 

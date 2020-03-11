@@ -46,6 +46,15 @@ func (r *repositoryPostsCRUD) FindAll() ([]models.Post, error) {
 			ch <- false
 			return
 		}
+		if len(posts) > 0 {
+			for i, _ := range posts {
+				err = r.db.Debug().Model(&models.User{}).Where("id = ?", posts[i].AuthorID).Take(&posts[i].Author).Error
+				if err != nil {
+					ch <- false
+					return
+				}
+			}
+		}
 		ch <- true
 	}(done)
 	if channels.OK(done) {
