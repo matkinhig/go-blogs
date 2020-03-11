@@ -11,9 +11,10 @@ import (
 )
 
 var (
-	PORT     = 0
-	DBDRIVER = ""
-	DBURL    = ""
+	PORT      = 0
+	SECRETKEY []byte
+	DBDRIVER  = ""
+	DBURL     = ""
 )
 
 func Load() {
@@ -29,4 +30,6 @@ func Load() {
 
 	DBDRIVER = os.Getenv("DB_DRIVER")
 	DBURL = fmt.Sprintf("%s:%s@(127.0.0.1)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+
+	SECRETKEY = []byte(os.Getenv("API_SECRET"))
 }

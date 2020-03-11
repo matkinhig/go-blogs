@@ -69,10 +69,17 @@ func (r *repositoryPostsCRUD) FindById(uid uint32) (models.Post, error) {
 	done := make(chan bool)
 	go func(ch chan<- bool) {
 		defer close(ch)
-		err = r.db.Debug().Model(&models.Post{}).Where("id = ?", uid).Find(&post).Error
+		err = r.db.Debug().Model(&models.Post{}).Where("id = ?", uid).Take(&post).Error
 		if err != nil {
 			ch <- false
 			return
+		}
+		if post.ID != 0 {
+			err = r.db.Debug().Model(&models.User{}).Where("id = ?", post.AuthorID).Take(&post.Author).Error
+			if err != nil {
+				ch <- false
+				return
+			}
 		}
 		ch <- true
 	}(done)
@@ -94,13 +101,15 @@ func (r *repositoryPostsCRUD) Update(uid uint32, post models.Post) (int64, error
 			map[string]interface{}{
 				"title":      post.Title,
 				"content":    post.Content,
-				"author_id":  post.AuthorID,
 				"updated_at": time.Now(),
 			},
 		)
 		ch <- true
 	}(done)
 	if channels.OK(done) {
+		if gorm.IsRecordNotFoundError(rs.Error) {
+			return 0, errors.New("post not found")
+		}
 		if rs.Error != nil {
 			return 0, rs.Error
 		}
