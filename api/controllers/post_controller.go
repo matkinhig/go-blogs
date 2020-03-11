@@ -26,6 +26,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
 	repo := crud.NewRepositoryPostsCRUD(db)
 	func(postRepo repository.PostRepository) {
 		posts, err := postRepo.FindAll()
@@ -62,6 +63,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
 
 	repo := crud.NewRepositoryPostsCRUD(db)
 
@@ -89,6 +91,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	defer db.Close()
 
 	repo := crud.NewRepositoryPostsCRUD(db)
 	func(postRepo repository.PostRepository) {
@@ -129,6 +132,7 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -155,6 +159,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

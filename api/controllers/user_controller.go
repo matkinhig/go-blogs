@@ -18,6 +18,7 @@ import (
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -54,6 +55,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -80,6 +82,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -123,6 +126,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -150,6 +154,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := database.Connect()
+	defer db.Close()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
