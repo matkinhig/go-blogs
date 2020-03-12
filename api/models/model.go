@@ -1,8 +1,10 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import "time"
 
 //code next in here
 type Model struct {
-	gorm.Model
+	ID         uint64
+	Created_At time.Time
+	Update_At  time.Time
 }
