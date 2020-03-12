@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -55,6 +56,17 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	err = postIn.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	if uid != postIn.AuthorID {
+		responses.ERROR(w, http.StatusUnauthorized, err)
 		return
 	}
 
@@ -129,6 +141,17 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	err = post.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+	}
+
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	if uid != post.AuthorID {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
 	}
 
 	db, err := database.Connect()

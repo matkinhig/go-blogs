@@ -2,18 +2,19 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/matkinhig/go-blogs/api/auth"
 	"github.com/matkinhig/go-blogs/api/database"
 	"github.com/matkinhig/go-blogs/api/models"
 	"github.com/matkinhig/go-blogs/api/repository"
 	"github.com/matkinhig/go-blogs/api/repository/crud"
 	"github.com/matkinhig/go-blogs/api/responses"
-
 )
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -125,6 +126,17 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusConflict, err)
 	}
 
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	if uint64(tokenID) != uid {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
 	db, err := database.Connect()
 	defer db.Close()
 	if err != nil {
@@ -150,6 +162,17 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	if uint64(tokenID) != uid {
+		responses.ERROR(w, http.StatusUnauthorized, err)
 		return
 	}
 
