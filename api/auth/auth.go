@@ -6,7 +6,6 @@ import (
 	"github.com/matkinhig/go-blogs/api/database"
 	"github.com/matkinhig/go-blogs/api/models"
 	"github.com/matkinhig/go-blogs/api/security"
-
 )
 
 func SignIn(email, password string) (string, error) {
