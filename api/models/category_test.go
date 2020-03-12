@@ -1,5 +1,7 @@
 package models
 
+import "testing"
+
 func TestDescriptionModel(t *testing.T) {
 	c := &Category{}
 	c.Description = "Smart Phone"
