@@ -8,12 +8,12 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/matkinhig/go-blogs/api/auth"
 	"github.com/matkinhig/go-blogs/api/database"
 	"github.com/matkinhig/go-blogs/api/models"
 	"github.com/matkinhig/go-blogs/api/repository"
 	"github.com/matkinhig/go-blogs/api/repository/crud"
 	"github.com/matkinhig/go-blogs/api/responses"
-
 )
 
 func test() {
@@ -73,7 +73,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
 		}
-		w.Header().Set("Location", fmt.Sprintf("%s %s %d", r.Host, r.RequestURI, p.ID))
+		w.Header().Set("Location", fmt.Sprintf("%s %s %d", r.Host, r.URL.Path, p.ID))
 		responses.JSON(w, http.StatusCreated, &p)
 	}(repo)
 }
@@ -158,6 +158,14 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	fmt.Println(uid)
+
 	db, err := database.Connect()
 	defer db.Close()
 	if err != nil {
@@ -168,12 +176,12 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 	repo := crud.NewRepositoryPostsCRUD(db)
 
 	func(postRepo repository.PostRepository) {
-		_, err := postRepo.Delete(uint32(pid))
+		_, err := postRepo.Delete(uint32(pid), uint32(uid))
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
 		}
-		w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+		w.Header().Set("Entity", fmt.Sprintf("%d %d", pid, uid))
 		responses.JSON(w, http.StatusNoContent, "")
 	}(repo)
 }

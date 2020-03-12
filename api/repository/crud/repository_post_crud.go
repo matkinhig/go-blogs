@@ -7,7 +7,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/matkinhig/go-blogs/api/channels"
 	"github.com/matkinhig/go-blogs/api/models"
-
 )
 
 type repositoryPostsCRUD struct {
@@ -118,12 +117,12 @@ func (r *repositoryPostsCRUD) Update(uid uint32, post models.Post) (int64, error
 	return 0, rs.Error
 }
 
-func (r *repositoryPostsCRUD) Delete(uid uint32) (int64, error) {
+func (r *repositoryPostsCRUD) Delete(pid, uid uint32) (int64, error) {
 	var rs *gorm.DB
 	done := make(chan bool)
 	go func(ch chan<- bool) {
 		defer close(ch)
-		rs = r.db.Debug().Model(&models.Post{}).Where("id = ?", uid).Take(&models.Post{}).Delete(&models.Post{})
+		rs = r.db.Debug().Model(&models.Post{}).Where("id = ? and author_id = ?", pid, uid).Take(&models.Post{}).Delete(&models.Post{})
 		ch <- true
 	}(done)
 	if channels.OK(done) {
