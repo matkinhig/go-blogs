@@ -36,7 +36,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	role, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusNetworkAuthenticationRequired, errors.New("Cant create product because you dont have a permisson"))
-		return err
+		return
 	}
 
 	if role != 1 {
