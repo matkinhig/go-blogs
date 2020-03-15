@@ -27,6 +27,7 @@ func (r *repositoryPostsCRUD) Save(post models.Post) (models.Post, error) {
 			ch <- false
 			return
 		}
+		ch <- true
 	}(done)
 	if channels.OK(done) {
 		return post, nil

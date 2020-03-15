@@ -11,10 +11,11 @@ const (
 
 type Product struct {
 	Model
-	Name    string        `gorm:"size:512; not null" json:"name"`
-	Price   float64       `gorm:"type:decimal(10,2);not null;default:0.0" json:"price"`
-	Quality uint16        `gorm:"default:0;unsigned" json:"quantity"`
-	Status  ProductStatus `gorm:"char(1);default:1" json:"status"`
+	Name       string        `gorm:"size:512; not null" json:"name"`
+	Price      float64       `gorm:"type:decimal(10,2);not null;default:0.0" json:"price"`
+	Quality    uint16        `gorm:"default:0;unsigned" json:"quantity"`
+	Status     ProductStatus `gorm:"char(1);default:1" json:"status"`
+	CategoryID uint32        `gorm:"not null" json:"category_id"`
 }
 
 var (
