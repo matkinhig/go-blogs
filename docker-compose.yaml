@@ -1,0 +1,30 @@
+version: '2.2'
+services:
+    db:
+        container_name: blogs_db
+        image: 'mysql:5.7'
+        environment: 
+            - MYSQL_DATABASE=blogs
+            - MYSQL_ROOT_PASSWORD=ronglong01
+            - MYSQL_USER=mysql
+            - MYSQL_HOST=db
+        ports: 
+            - "3306:3306"
+        volumes: 
+            - ./data:/var/lib/mysql
+            - ./sql:/docker-entrypoint-initdb.d
+    api:
+        build: .
+        restart: on-failure
+        depends_on:
+            - db
+        links:
+            - db
+        environment:
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_NAME=blogs
+            - DB_USER=root
+            - DB_PASS=ronglong01
+        ports:
+            - 3009:3009
