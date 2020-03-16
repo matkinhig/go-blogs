@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,52 +14,49 @@ import (
 	"github.com/matkinhig/go-blogs/api/responses"
 )
 
-func CreateProduct(w http.ResponseWriter, r *http.Request) {
+func CreateCategory(w http.ResponseWriter, r *http.Request) {
+	if r.Body != nil {
+		defer r.Body.Close()
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("cant understand your request"))
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	prodIn := models.Product{}
-	if err = json.Unmarshal(body, &prodIn); err != nil {
+	cateIn := models.Category{}
+	err = json.Unmarshal(body, &cateIn)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	if err = prodIn.Validate(); err != nil {
+	err = cateIn.Validate()
+	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-
-	// role, err := auth.ExtractTokenID(r)
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusNetworkAuthenticationRequired, errors.New("Cant create product because you dont have a permisson"))
-	// 	return
-	// }
-
-	// if role != 1 {
-	// 	responses.ERROR(w, http.StatusUnauthorized, err)
-	// 	return
-	// }
 
 	db, err := database.Connect()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+
 	defer db.Close()
+	repo := crud.NewRepositoryCategoriesCRUD(db)
 
-	repo := crud.NewRepositoryProductsCRUD(db)
-
-	func(prod repository.ProductRepository) {
-		p, err := prod.Save(&prodIn)
+	func(cate repository.CategoryRepository) {
+		c, err := cate.Save(&cateIn)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
 		}
-		w.Header().Set("Location", fmt.Sprintf("%s %s %d", r.Host, r.URL.Path, p.ID))
-		responses.JSON(w, http.StatusCreated, &p)
+		w.Header().Set("Location", fmt.Sprintf("%s %s %d", r.Host, r.URL.Path, c.ID))
+		responses.JSON(w, http.StatusCreated, &c)
 	}(repo)
 
 }

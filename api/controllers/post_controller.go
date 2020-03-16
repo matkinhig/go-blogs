@@ -17,10 +17,6 @@ import (
 	"github.com/matkinhig/go-blogs/api/responses"
 )
 
-func test() {
-	fmt.Println("oke")
-}
-
 func GetPosts(w http.ResponseWriter, r *http.Request) {
 	db, err := database.Connect()
 	if err != nil {
