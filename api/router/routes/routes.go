@@ -18,6 +18,8 @@ func Load() []Route {
 	routes := userRoutes
 	routes = append(routes, postRoutes...)
 	routes = append(routes, loginRoutes...)
+	routes = append(routes, categoryRoutes...)
+	routes = append(routes, productRoutes...)
 	return routes
 }
 
