@@ -1,7 +1,7 @@
-# Template
-facebook.com/matkinhig
-matkinhig@gmail.com
-matkinhig@outlook.com
+# HƯỚNG DẪN SỬ DỤNG
+. facebook.com/matkinhig
+. matkinhig@gmail.com
+. matkinhig@outlook.com
 
 ## INSTALL PROJECT WITH DOCKER COMPOSE.
 
