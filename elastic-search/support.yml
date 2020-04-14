@@ -1,19 +1,32 @@
-version: '3'
+version: '3.7'
+
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
-    ports:
-      - 9200:9200
-    volumes:
-      - ./share/elasticsearch/data:/usr/share/elasticsearch/data
-      - ./share/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    networks: [elastic]
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: elasticsearch
     environment:
-      - discovery.type=single-node
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.3.2
+      - node.name=elasticsearch
+      - cluster.name=datasearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.initial_master_nodes=elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     ports:
-      - 5601:5601
-    networks: [elastic]
-networks:
-  elastic:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    ports:
+      - "5601:5601"
+
+volumes:
+  esdata:
+    driver_opts:
+      type: volumn
+      device: /Users/matkinhig/Documents/9_Golang/github.com/go-blogs/elastic-search
+      o: bind
